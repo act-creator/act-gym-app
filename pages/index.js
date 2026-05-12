@@ -15,29 +15,19 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     try {
       if (isSignUp) {
         const { data, error } = await supabase.auth.signUp({ email, password })
         if (error) throw error
         if (data.user) {
-          await supabase.from('profiles').insert({
-            id: data.user.id,
-            name,
-            email,
-            role: 'member'
-          })
+          await supabase.from('profiles').insert({ id: data.user.id, name, email, role: 'member' })
           router.push('/member')
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single()
-        if (profile?.role === 'admin') {
-          router.push('/admin')
-        } else {
-          router.push('/member')
-        }
+        router.push(profile?.role === 'admin' ? '/admin' : '/member')
       }
     } catch (err) {
       setError(err.message === 'Invalid login credentials' ? 'メールアドレスまたはパスワードが違います' : err.message)
@@ -47,68 +37,45 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-act-light to-white flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-act-green rounded-2xl mb-4">
-            <span className="text-white text-2xl font-bold">A</span>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-800">パーソナルジムAct.</h1>
-          <p className="text-gray-500 text-sm mt-1">会員専用アプリ</p>
+    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 24px' }}>
+      <div style={{ width: '100%', maxWidth: '360px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <img src="/act_logo_2_b.jpg" alt="PERSONAL GYM Act." style={{ width: '140px', height: 'auto', marginBottom: '8px' }} />
+          <p style={{ fontSize: '11px', color: '#bbb', letterSpacing: '2px' }}>MEMBER APP</p>
         </div>
-
-        <div className="card">
-          <h2 className="text-base font-medium text-gray-700 mb-4">
+        <div className="card" style={{ borderRadius: '20px', padding: '24px' }}>
+          <h2 style={{ fontSize: '15px', fontWeight: '500', color: '#1a1a1a', marginBottom: '20px' }}>
             {isSignUp ? '新規会員登録' : 'ログイン'}
           </h2>
-
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg mb-4">{error}</div>
+            <div style={{ background: '#FFF0E8', color: '#E85D04', fontSize: '13px', padding: '12px', borderRadius: '10px', marginBottom: '16px', border: '0.5px solid #FFDCC8' }}>
+              {error}
+            </div>
           )}
-
-          <form onSubmit={handleAuth} className="space-y-3">
+          <form onSubmit={handleAuth}>
             {isSignUp && (
-              <input
-                type="text"
-                placeholder="お名前"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                className="input"
-                required
-              />
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>お名前</div>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} className="input" placeholder="山田 太郎" required />
+              </div>
             )}
-            <input
-              type="email"
-              placeholder="メールアドレス"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="input"
-              required
-            />
-            <input
-              type="password"
-              placeholder="パスワード"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="input"
-              required
-            />
-            <button type="submit" disabled={loading} className="btn-primary mt-2">
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>メールアドレス</div>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input" placeholder="email@example.com" required />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>パスワード</div>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="input" placeholder="••••••••" required />
+            </div>
+            <button type="submit" disabled={loading} className="btn-primary">
               {loading ? '処理中...' : isSignUp ? '登録する' : 'ログイン'}
             </button>
           </form>
-
-          <button
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-act-green text-sm text-center w-full mt-4"
-          >
+          <button onClick={() => setIsSignUp(!isSignUp)} style={{ width: '100%', textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#E85D04', background: 'none', border: 'none', cursor: 'pointer' }}>
             {isSignUp ? 'すでにアカウントをお持ちの方はこちら' : '新規会員登録はこちら'}
           </button>
         </div>
-
-        <p className="text-center text-xs text-gray-400 mt-6">
-          © 2025 パーソナルジムAct. 刈谷市
-        </p>
+        <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '11px', color: '#ccc', letterSpacing: '1px' }}>PERSONAL GYM Act. 刈谷市</p>
       </div>
     </div>
   )
