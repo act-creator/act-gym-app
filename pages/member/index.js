@@ -33,7 +33,7 @@ export default function MemberHome() {
     <div style={{ minHeight: '100vh', background: '#f7f7f5', paddingBottom: '80px' }}>
       {/* ヘッダー */}
       <div style={{ background: '#fff', borderBottom: '0.5px solid #ebebeb', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <img src="/act_logo_2_b.jpg" alt="Act." style={{ height: '32px', width: 'auto' }} />
+        <img src="/act_logo_1.jpg" alt="Act." style={{ height: '32px', width: 'auto' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '13px', color: '#999' }}>{profile?.name} さん</span>
           <button onClick={handleLogout} style={{ fontSize: '11px', color: '#ccc', border: '0.5px solid #ebebeb', padding: '4px 10px', borderRadius: '20px', background: 'none', cursor: 'pointer' }}>ログアウト</button>
