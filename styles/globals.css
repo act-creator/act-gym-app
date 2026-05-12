@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #f5f5f5;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.btn-primary {
+  @apply bg-act-green text-white py-3 px-6 rounded-xl font-medium text-sm hover:bg-act-dark transition-colors w-full;
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-700 py-3 px-6 rounded-xl font-medium text-sm border border-gray-200 hover:bg-gray-50 transition-colors w-full;
+}
+
+.card {
+  @apply bg-white rounded-2xl border border-gray-100 p-4 shadow-sm;
+}
+
+.input {
+  @apply w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-act-green bg-white;
+}
+
+.badge-green { @apply bg-act-light text-act-dark text-xs px-2 py-1 rounded-full; }
+.badge-amber { @apply bg-amber-50 text-amber-700 text-xs px-2 py-1 rounded-full; }
+.badge-red { @apply bg-red-50 text-red-700 text-xs px-2 py-1 rounded-full; }
+.badge-blue { @apply bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full; }
