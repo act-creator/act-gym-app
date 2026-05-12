@@ -39,8 +39,8 @@ export default function Login() {
   return (
     <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 24px' }}>
       <div style={{ width: '100%', maxWidth: '360px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <img src="/act_logo_2_b.jpg" alt="PERSONAL GYM Act." style={{ width: '140px', height: 'auto', marginBottom: '8px' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
+          <img src="/act_logo_2_b.jpg" alt="PERSONAL GYM Act." style={{ width: '140px', height: 'auto', marginBottom: '8px', display: 'block' }} />
           <p style={{ fontSize: '11px', color: '#bbb', letterSpacing: '2px' }}>MEMBER APP</p>
         </div>
         <div className="card" style={{ borderRadius: '20px', padding: '24px' }}>
