@@ -3,6 +3,20 @@ import { useRouter } from 'next/router'
 import { supabase } from '../../lib/supabase'
 import BottomNav from '../../components/BottomNav'
 
+function getEmbedUrl(url) {
+  if (!url) return null
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`
+  // Google Drive
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
+  return url
+}
+
 export default function Training() {
   const router = useRouter()
   const [menus, setMenus] = useState([])
@@ -44,7 +58,7 @@ export default function Training() {
           <div key={m.id} className="card cursor-pointer hover:border-act-border transition-colors" onClick={() => setSelected(m)}>
             {m.video_url && (
               <div className="relative rounded-xl overflow-hidden mb-3 bg-gray-900 h-36 flex items-center justify-center">
-                <iframe src={m.video_url.replace('watch?v=', 'embed/')} className="w-full h-full" frameBorder="0" allowFullScreen />
+                <iframe src={getEmbedUrl(m.video_url)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
               </div>
             )}
             <div className="flex items-start justify-between gap-2">
@@ -74,7 +88,7 @@ export default function Training() {
             </div>
             {selected.video_url && (
               <div className="rounded-xl overflow-hidden mb-4 bg-gray-900 aspect-video">
-                <iframe src={selected.video_url.replace('watch?v=', 'embed/')} className="w-full h-full" frameBorder="0" allowFullScreen />
+                <iframe src={getEmbedUrl(selected.video_url)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
               </div>
             )}
             <div className="flex gap-2 mb-4 flex-wrap">
