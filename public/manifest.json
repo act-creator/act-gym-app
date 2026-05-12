@@ -9,12 +9,12 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/act_logo_2_b.jpg",
+      "src": "/act_logo_1.jpg",
       "sizes": "192x192",
       "type": "image/jpeg"
     },
     {
-      "src": "/act_logo_2_b.jpg",
+      "src": "/act_logo_1.jpg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
