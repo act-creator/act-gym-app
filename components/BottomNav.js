@@ -6,12 +6,10 @@ const navItems = [
       <path d="M3 10L11 3L19 10V19H14V14H8V19H3V10Z" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5" strokeLinejoin="round"/>
     </svg>
   )},
-  { href: '/member/booking', label: '予約', icon: (active) => (
+  { href: '/member/habit', label: '習慣', icon: (active) => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <rect x="2" y="4" width="18" height="15" rx="2" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5"/>
-      <line x1="7" y1="2" x2="7" y2="6" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="15" y1="2" x2="15" y2="6" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5" strokeLinecap="round"/>
-      <line x1="2" y1="9" x2="20" y2="9" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5"/>
+      <rect x="3" y="3" width="16" height="16" rx="3" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5"/>
+      <polyline points="7,11 9.5,13.5 15,8" stroke={active ? '#E85D04' : '#ccc'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   )},
   { href: '/member/log', label: '記録', icon: (active) => (
@@ -36,7 +34,7 @@ const navItems = [
 export default function BottomNav() {
   const router = useRouter()
   return (
-    <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#fff', borderTop: '0.5px solid #ebebeb', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', paddingBottom: '16px', paddingTop: '8px', zIndex: 50, maxWidth: '480px', margin: '0 auto' }}>
+    <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#fff', borderTop: '0.5px solid #ebebeb', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', paddingBottom: '16px', paddingTop: '8px', zIndex: 50 }}>
       {navItems.map(item => {
         const active = router.pathname === item.href
         return (
