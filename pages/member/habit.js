@@ -177,15 +177,15 @@ export default function Habit() {
           </div>
         )}
 
-        <button onClick={() => setShowAddModal(true)} style={{ width: '100%', background: '#fff', border: '1px dashed #ddd', borderRadius: '14px', padding: '14px', fontSize: '13px', color: '#bbb', cursor: 'pointer', textAlign: 'center' }}>
+        <button onClick={() => { setShowAddModal(true); document.body.style.overflow = 'hidden' }} style={{ width: '100%', background: '#fff', border: '1px dashed #ddd', borderRadius: '14px', padding: '14px', fontSize: '13px', color: '#bbb', cursor: 'pointer', textAlign: 'center' }}>
           ＋ メニューを追加する
         </button>
       </div>
 
       {/* 追加モーダル */}
       {showAddModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }} onClick={() => setShowAddModal(false)}>
-          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', width: '100%', padding: '24px 16px 40px', maxHeight: '80vh', overflowY: 'auto' }} onClick={e => e.stopPropagation()}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }} onClick={() => { setShowAddModal(false); document.body.style.overflow = '' }}>
+          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', width: '100%', padding: '24px 16px 48px', height: '75vh', overflowY: 'scroll', WebkitOverflowScrolling: 'touch' }} onClick={e => e.stopPropagation()}>
             <div style={{ fontSize: '15px', fontWeight: '500', color: '#1a1a1a', marginBottom: '16px' }}>メニューを追加</div>
 
             <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '8px', letterSpacing: '0.5px' }}>登録済みメニューから選ぶ</div>
