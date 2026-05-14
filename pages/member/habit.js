@@ -121,7 +121,7 @@ export default function Habit() {
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}><div style={{ color: '#ccc' }}>読み込み中...</div></div>
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f7f5', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#f7f7f5', paddingBottom: '120px' }}>
       {/* ヘッダー */}
       <div style={{ background: '#fff', borderBottom: '0.5px solid #ebebeb', padding: '14px 16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
