@@ -67,11 +67,26 @@ export default function Log() {
   const handleImage = (e) => {
     const file = e.target.files[0]
     if (!file) return
-    setImageType(file.type)
+    setImageType('image/jpeg')
     const reader = new FileReader()
     reader.onload = (ev) => {
-      setImage(ev.target.result)
-      setImageBase64(ev.target.result.split(',')[1])
+      const img = new window.Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const maxSize = 800
+        let w = img.width
+        let h = img.height
+        if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize }
+        else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize }
+        canvas.width = w
+        canvas.height = h
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, w, h)
+        const compressed = canvas.toDataURL('image/jpeg', 0.7)
+        setImage(compressed)
+        setImageBase64(compressed.split(',')[1])
+      }
+      img.src = ev.target.result
     }
     reader.readAsDataURL(file)
   }
