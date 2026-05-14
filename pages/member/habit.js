@@ -87,7 +87,7 @@ export default function Habit() {
       }
     }
 
-    const { data } = await supabase.from('habit_items').insert({
+    const { data, error } = await supabase.from('habit_items').insert({
       user_id: userId,
       menu_id: selectedMenu || null,
       title,
@@ -97,9 +97,15 @@ export default function Habit() {
       order_index: items.length
     }).select()
 
-    if (data) {
+    if (error) {
+      alert('追加エラー: ' + error.message)
+      return
+    }
+
+    if (data && data.length > 0) {
       setItems(prev => [...prev, data[0]])
       setShowAddModal(false)
+      document.body.style.overflow = ''
       setSelectedMenu('')
       setCustomTitle('')
       setCustomSub('')
