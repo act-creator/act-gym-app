@@ -87,9 +87,13 @@ export default function Log() {
         body: JSON.stringify({ imageBase64, imageType })
       })
       const data = await res.json()
-      setAiResult(data)
+      if (data.error) {
+        alert('分析エラー: ' + data.error)
+      } else {
+        setAiResult(data)
+      }
     } catch (e) {
-      console.error(e)
+      alert('通信エラー: ' + e.message)
     }
     setAnalyzing(false)
   }
@@ -156,7 +160,7 @@ export default function Log() {
           <>
             <div className="card">
               <h2 className="text-sm font-medium text-gray-700 mb-3">AI食事分析</h2>
-              <input type="file" ref={fileRef} accept="image/*" capture="environment" onChange={handleImage} className="hidden" />
+              <input type="file" ref={fileRef} accept="image/*" onChange={handleImage} className="hidden" />
 
               {!image ? (
                 <button onClick={() => fileRef.current.click()} className="w-full border-2 border-dashed border-gray-200 rounded-xl py-8 flex flex-col items-center gap-2 text-gray-400 hover:border-act-green transition-colors">
