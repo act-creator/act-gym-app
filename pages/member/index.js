@@ -94,14 +94,7 @@ export default function MemberHome() {
           </button>
         </div>
 
-        {/* Act.紹介バナー */}
-        <div style={{ background: '#1a1a1a', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: '12px', color: '#fff', marginBottom: '4px' }}>柔道整復師資格のトレーナー</div>
-            <div style={{ fontSize: '11px', color: '#555' }}>刈谷市唯一のアニマルフロー</div>
-          </div>
-          <div style={{ background: '#E85D04', color: '#fff', fontSize: '11px', padding: '5px 12px', borderRadius: '20px', fontWeight: '500' }}>Act.</div>
-        </div>
+
       </div>
       <BottomNav />
     </div>
