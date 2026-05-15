@@ -70,23 +70,39 @@ export default function Log() {
     setImageType('image/jpeg')
     const reader = new FileReader()
     reader.onload = (ev) => {
-      const img = new window.Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        const maxSize = 800
-        let w = img.width
-        let h = img.height
-        if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize }
-        else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize }
-        canvas.width = w
-        canvas.height = h
-        const ctx = canvas.getContext('2d')
-        ctx.drawImage(img, 0, 0, w, h)
-        const compressed = canvas.toDataURL('image/jpeg', 0.7)
-        setImage(compressed)
-        setImageBase64(compressed.split(',')[1])
+      const dataUrl = ev.target.result
+      // まずプレビューを即表示
+      setImage(dataUrl)
+      // 圧縮処理
+      try {
+        const img = document.createElement('img')
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas')
+            const maxSize = 800
+            let w = img.width
+            let h = img.height
+            if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize }
+            else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize }
+            canvas.width = w
+            canvas.height = h
+            const ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, w, h)
+            const compressed = canvas.toDataURL('image/jpeg', 0.7)
+            setImage(compressed)
+            setImageBase64(compressed.split(',')[1])
+          } catch(err) {
+            // 圧縮失敗時はそのまま使用
+            setImageBase64(dataUrl.split(',')[1])
+          }
+        }
+        img.onerror = () => {
+          setImageBase64(dataUrl.split(',')[1])
+        }
+        img.src = dataUrl
+      } catch(err) {
+        setImageBase64(dataUrl.split(',')[1])
       }
-      img.src = ev.target.result
     }
     reader.readAsDataURL(file)
   }
