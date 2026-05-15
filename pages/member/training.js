@@ -5,16 +5,35 @@ import BottomNav from '../../components/BottomNav'
 
 function getEmbedUrl(url) {
   if (!url) return null
-  // YouTube
   const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)
   if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`
-  // Vimeo
   const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`
-  // Google Drive
   const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
   if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
   return url
+}
+
+// 部位ごとの色
+const categoryColors = {
+  '下半身': { bg: '#FFF0E8', color: '#E85D04', border: '#FFDCC8' },
+  '上半身': { bg: '#EEF4FF', color: '#3B6FD4', border: '#C8D8FF' },
+  '体幹':   { bg: '#EEFAF3', color: '#1E8A4C', border: '#C8EDD9' },
+  'ストレッチ': { bg: '#FDF5FF', color: '#8B3FD4', border: '#E2C8FF' },
+  '全身':   { bg: '#FFF8EE', color: '#B36800', border: '#FFE0A8' },
+}
+
+// 難易度ごとの色
+const levelColors = {
+  '初級': { bg: '#EEFAF3', color: '#1E8A4C' },
+  '中級': { bg: '#FFF8EE', color: '#B36800' },
+  '上級': { bg: '#FEEEEE', color: '#C0392B' },
+}
+
+// カードの左ボーダー色
+const cardAccent = (category) => {
+  const c = categoryColors[category]
+  return c ? c.color : '#E85D04'
 }
 
 export default function Training() {
@@ -22,7 +41,7 @@ export default function Training() {
   const [menus, setMenus] = useState([])
   const [selected, setSelected] = useState(null)
   const [category, setCategory] = useState('全て')
-  const categories = ['全て', '下半身', '上半身', '体幹', 'ストレッチ']
+  const categories = ['全て', '下半身', '上半身', '体幹', 'ストレッチ', '全身']
 
   useEffect(() => {
     const load = async () => {
@@ -36,80 +55,99 @@ export default function Training() {
 
   const filtered = category === '全て' ? menus : menus.filter(m => m.category === category)
 
+  const catColor = (cat) => categoryColors[cat] || { bg: '#f5f5f5', color: '#888', border: '#e0e0e0' }
+  const lvlColor = (lvl) => levelColors[lvl] || { bg: '#f5f5f5', color: '#888' }
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="bg-white border-b border-gray-100 px-4 py-4">
-        <h1 className="text-base font-bold text-gray-800">トレーニングメニュー</h1>
-        <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+    <div style={{ minHeight: '100vh', background: '#f7f7f5', paddingBottom: '80px' }}>
+      <div style={{ background: '#fff', borderBottom: '0.5px solid #ebebeb', padding: '14px 16px' }}>
+        <div style={{ fontSize: '15px', fontWeight: '500', color: '#1a1a1a', marginBottom: '12px' }}>トレーニングメニュー</div>
+        <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '2px' }}>
           {categories.map(c => (
             <button key={c} onClick={() => setCategory(c)}
-              className={`text-sm px-3 py-1 rounded-full border whitespace-nowrap transition-colors flex-shrink-0 ${category === c ? 'bg-act-green text-white border-act-green' : 'border-gray-200 text-gray-500'}`}>
+              style={{
+                fontSize: '12px', padding: '5px 12px', borderRadius: '20px', border: '0.5px solid', whiteSpace: 'nowrap', flexShrink: 0, cursor: 'pointer', transition: 'all 0.15s',
+                background: category === c ? '#E85D04' : '#fff',
+                color: category === c ? '#fff' : '#888',
+                borderColor: category === c ? '#E85D04' : '#e0e0e0',
+              }}>
               {c}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="p-4 space-y-3">
+      <div style={{ padding: '14px 16px' }}>
         {filtered.length === 0 && (
-          <div className="text-center py-10 text-gray-400 text-sm">メニューが登録されていません</div>
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#ccc', fontSize: '14px' }}>メニューが登録されていません</div>
         )}
-        {filtered.map(m => (
-          <div key={m.id} className="card cursor-pointer hover:border-act-border transition-colors" onClick={() => setSelected(m)}>
-            {m.video_url && (
-              <div className="relative rounded-xl overflow-hidden mb-3 bg-gray-900 h-36 flex items-center justify-center">
-                <iframe src={getEmbedUrl(m.video_url)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
-              </div>
-            )}
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-sm font-medium text-gray-800 mb-1">{m.title}</p>
-                <div className="flex gap-1 flex-wrap">
-                  {m.category && <span className="badge-green">{m.category}</span>}
-                  {m.level && <span className="badge-blue">{m.level}</span>}
+        {filtered.map(m => {
+          const cc = catColor(m.category)
+          const lc = lvlColor(m.level)
+          return (
+            <div key={m.id} onClick={() => setSelected(m)}
+              style={{ background: '#fff', borderRadius: '16px', border: '0.5px solid #ebebeb', marginBottom: '12px', overflow: 'hidden', cursor: 'pointer', borderLeft: `3px solid ${cardAccent(m.category)}` }}>
+              {m.video_url && (
+                <div style={{ height: '140px', background: '#1a1a1a', overflow: 'hidden' }}>
+                  <iframe src={getEmbedUrl(m.video_url)} style={{ width: '100%', height: '100%' }} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
                 </div>
-              </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-xs text-gray-400">セット数</p>
-                <p className="text-sm font-bold text-gray-800">{m.sets}×{m.reps}</p>
+              )}
+              <div style={{ padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '500', color: '#1a1a1a' }}>{m.title}</div>
+                  <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '8px' }}>
+                    <div style={{ fontSize: '10px', color: '#aaa' }}>セット数</div>
+                    <div style={{ fontSize: '13px', fontWeight: '500', color: '#1a1a1a' }}>{m.sets}×{m.reps}</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                  {m.category && (
+                    <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '20px', background: cc.bg, color: cc.color, border: `0.5px solid ${cc.border}` }}>
+                      {m.category}
+                    </span>
+                  )}
+                  {m.level && (
+                    <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '20px', background: lc.bg, color: lc.color }}>
+                      {m.level}
+                    </span>
+                  )}
+                </div>
+                {m.description && <p style={{ fontSize: '12px', color: '#aaa', marginTop: '7px', lineHeight: '1.5', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{m.description}</p>}
               </div>
             </div>
-            {m.description && <p className="text-xs text-gray-400 mt-2 line-clamp-2">{m.description}</p>}
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {selected && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end" onClick={() => setSelected(null)}>
-          <div className="bg-white rounded-t-3xl w-full max-h-[80vh] overflow-y-auto p-5" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-lg font-bold text-gray-800">{selected.title}</h2>
-              <button onClick={() => setSelected(null)} className="text-gray-400 text-xl">✕</button>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 50, display: 'flex', alignItems: 'flex-end' }} onClick={() => setSelected(null)}>
+          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', width: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '20px 16px 40px', borderTop: `4px solid ${cardAccent(selected.category)}` }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <div style={{ fontSize: '18px', fontWeight: '500', color: '#1a1a1a' }}>{selected.title}</div>
+              <button onClick={() => setSelected(null)} style={{ background: '#f5f5f5', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', color: '#888', fontSize: '14px' }}>✕</button>
             </div>
+
             {selected.video_url && (
-              <div className="rounded-xl overflow-hidden mb-4 bg-gray-900 aspect-video">
-                <iframe src={getEmbedUrl(selected.video_url)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
+              <div style={{ borderRadius: '14px', overflow: 'hidden', marginBottom: '14px', background: '#1a1a1a', aspectRatio: '16/9' }}>
+                <iframe src={getEmbedUrl(selected.video_url)} style={{ width: '100%', height: '100%' }} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
               </div>
             )}
-            <div className="flex gap-2 mb-4 flex-wrap">
-              {selected.category && <span className="badge-green">{selected.category}</span>}
-              {selected.level && <span className="badge-blue">{selected.level}</span>}
+
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '14px', flexWrap: 'wrap' }}>
+              {selected.category && (() => { const cc = catColor(selected.category); return <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '20px', background: cc.bg, color: cc.color, border: `0.5px solid ${cc.border}` }}>{selected.category}</span> })()}
+              {selected.level && (() => { const lc = lvlColor(selected.level); return <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '20px', background: lc.bg, color: lc.color }}>{selected.level}</span> })()}
             </div>
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400 mb-1">セット</p>
-                <p className="text-lg font-bold text-gray-800">{selected.sets}</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400 mb-1">回数</p>
-                <p className="text-lg font-bold text-gray-800">{selected.reps}</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400 mb-1">休憩</p>
-                <p className="text-lg font-bold text-gray-800">{selected.rest_seconds}秒</p>
-              </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '14px' }}>
+              {[['セット', selected.sets], ['回数', selected.reps], ['休憩', `${selected.rest_seconds}秒`]].map(([label, val]) => (
+                <div key={label} style={{ background: '#f7f7f5', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '4px' }}>{label}</div>
+                  <div style={{ fontSize: '16px', fontWeight: '500', color: '#1a1a1a' }}>{val}</div>
+                </div>
+              ))}
             </div>
-            {selected.description && <p className="text-sm text-gray-600 leading-relaxed">{selected.description}</p>}
+
+            {selected.description && <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.7' }}>{selected.description}</p>}
           </div>
         </div>
       )}
