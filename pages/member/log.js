@@ -79,7 +79,7 @@ export default function Log() {
         img.onload = () => {
           try {
             const canvas = document.createElement('canvas')
-            const maxSize = 800
+            const maxSize = 400
             let w = img.width
             let h = img.height
             if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize }
@@ -88,7 +88,7 @@ export default function Log() {
             canvas.height = h
             const ctx = canvas.getContext('2d')
             ctx.drawImage(img, 0, 0, w, h)
-            const compressed = canvas.toDataURL('image/jpeg', 0.7)
+            const compressed = canvas.toDataURL('image/jpeg', 0.4)
             setImage(compressed)
             setImageBase64(compressed.split(',')[1])
           } catch(err) {
