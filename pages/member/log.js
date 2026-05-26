@@ -137,7 +137,23 @@ export default function Log() {
   const saveMealLog = async (e) => {
     e.preventDefault()
     setLoading(true)
-    await supabase.from('meal_logs').insert({ user_id: userId, meal_type: mealType, content: mealContent })
+    let photoUrl = null
+    if (image) {
+      try {
+        const base64 = image.split(',')[1]
+        const binary = atob(base64)
+        const array = new Uint8Array(binary.length)
+        for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i)
+        const blob = new Blob([array], { type: 'image/jpeg' })
+        const fileName = `${userId}/${Date.now()}.jpg`
+        const { data: uploadData, error: uploadError } = await supabase.storage.from('meal-photos').upload(fileName, blob)
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage.from('meal-photos').getPublicUrl(fileName)
+          photoUrl = urlData.publicUrl
+        }
+      } catch(e) { console.error('upload error', e) }
+    }
+    await supabase.from('meal_logs').insert({ user_id: userId, meal_type: mealType, content: mealContent, ai_feedback: photoUrl })
     const { data: ml } = await supabase.from('meal_logs').select('*').eq('user_id', userId).order('logged_at', { ascending: false }).limit(30)
     setMealLogs(ml || [])
     setSuccess('食事を記録しました！')
@@ -254,9 +270,14 @@ export default function Log() {
                   </>
                 ) : <div style={{ fontSize:'12px',color:'#ccc',padding:'4px 0' }}>体重の記録なし</div>}
                 {selectedMeals.map((m,i) => (
-                  <div key={m.id} style={{ display:'flex',alignItems:'center',gap:'8px',padding:'8px 0',borderTop:'0.5px solid #f5f5f5' }}>
-                    <span style={{ fontSize:'10px',padding:'2px 7px',borderRadius:'10px',background:'#EEFAF3',color:'#1E8A4C',flexShrink:0 }}>{m.meal_type}</span>
-                    <span style={{ fontSize:'13px',color:'#1a1a1a' }}>{m.content}</span>
+                  <div key={m.id} style={{ padding:'8px 0',borderTop:'0.5px solid #f5f5f5' }}>
+                    <div style={{ display:'flex',alignItems:'center',gap:'8px',marginBottom: m.ai_feedback ? '8px' : '0' }}>
+                      <span style={{ fontSize:'10px',padding:'2px 7px',borderRadius:'10px',background:'#EEFAF3',color:'#1E8A4C',flexShrink:0 }}>{m.meal_type}</span>
+                      <span style={{ fontSize:'13px',color:'#1a1a1a' }}>{m.content}</span>
+                    </div>
+                    {m.ai_feedback && (
+                      <img src={m.ai_feedback} alt="食事写真" style={{ width:'100%',maxHeight:'160px',objectFit:'cover',borderRadius:'10px',display:'block' }} />
+                    )}
                   </div>
                 ))}
                 {!selectedBody && selectedMeals.length === 0 && (
@@ -347,7 +368,10 @@ export default function Log() {
                     <span style={{ fontSize:'10px',padding:'2px 7px',borderRadius:'10px',background:'#EEFAF3',color:'#1E8A4C' }}>{m.meal_type}</span>
                     <span style={{ fontSize:'11px',color:'#bbb' }}>{m.logged_at}</span>
                   </div>
-                  <div style={{ fontSize:'13px',color:'#1a1a1a' }}>{m.content}</div>
+                  <div style={{ fontSize:'13px',color:'#1a1a1a',marginBottom: m.ai_feedback ? '8px' : '0' }}>{m.content}</div>
+                {m.ai_feedback && (
+                  <img src={m.ai_feedback} alt="食事写真" style={{ width:'100%',maxHeight:'160px',objectFit:'cover',borderRadius:'10px',display:'block' }} />
+                )}
                 </div>
               ))}
             </div>
