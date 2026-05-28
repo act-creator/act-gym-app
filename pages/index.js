@@ -38,40 +38,36 @@ export default function Login() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 24px' }}>
-      <div style={{ width: '100%', maxWidth: '360px' }}>
+      <div style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
           <img src="/act_logo_1.jpg" alt="PERSONAL GYM Act." style={{ width: '180px', height: 'auto', marginBottom: '8px', display: 'block' }} />
           <p style={{ fontSize: '11px', color: '#bbb', letterSpacing: '2px' }}>MEMBER APP</p>
         </div>
-        <div className="card" style={{ borderRadius: '20px', padding: '24px' }}>
-          <h2 style={{ fontSize: '15px', fontWeight: '500', color: '#1a1a1a', marginBottom: '20px' }}>
+        <div style={{ background: '#fff', borderRadius: '20px', padding: '24px', border: '0.5px solid #ebebeb' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: '500', color: '#1a1a1a', marginBottom: '20px' }}>
             {isSignUp ? '新規会員登録' : 'ログイン'}
           </h2>
-          {error && (
-            <div style={{ background: '#FFF0E8', color: '#E85D04', fontSize: '13px', padding: '12px', borderRadius: '10px', marginBottom: '16px', border: '0.5px solid #FFDCC8' }}>
-              {error}
-            </div>
-          )}
+          {error && <div style={{ background: '#FFF0E8', color: '#E85D04', fontSize: '13px', padding: '12px', borderRadius: '10px', marginBottom: '16px', border: '0.5px solid #FFDCC8' }}>{error}</div>}
           <form onSubmit={handleAuth}>
             {isSignUp && (
               <div style={{ marginBottom: '12px' }}>
                 <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>お名前</div>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} className="input" placeholder="山田 太郎" required />
+                <input type="text" value={name} onChange={e => setName(e.target.value)} className="input" placeholder="山田 太郎" required style={{ fontSize: '16px' }} />
               </div>
             )}
             <div style={{ marginBottom: '12px' }}>
               <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>メールアドレス</div>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input" placeholder="email@example.com" required />
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="input" placeholder="email@example.com" required style={{ fontSize: '16px' }} />
             </div>
             <div style={{ marginBottom: '20px' }}>
               <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px' }}>パスワード</div>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="input" placeholder="••••••••" required />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="input" placeholder="••••••••" required style={{ fontSize: '16px' }} />
             </div>
-            <button type="submit" disabled={loading} className="btn-primary">
+            <button type="submit" disabled={loading} className="btn-primary" style={{ fontSize: '16px' }}>
               {loading ? '処理中...' : isSignUp ? '登録する' : 'ログイン'}
             </button>
           </form>
-          <button onClick={() => setIsSignUp(!isSignUp)} style={{ width: '100%', textAlign: 'center', marginTop: '16px', fontSize: '13px', color: '#E85D04', background: 'none', border: 'none', cursor: 'pointer' }}>
+          <button onClick={() => setIsSignUp(!isSignUp)} style={{ width: '100%', textAlign: 'center', marginTop: '16px', fontSize: '14px', color: '#E85D04', background: 'none', border: 'none', cursor: 'pointer' }}>
             {isSignUp ? 'すでにアカウントをお持ちの方はこちら' : '新規会員登録はこちら'}
           </button>
         </div>
