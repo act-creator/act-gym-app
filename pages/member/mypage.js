@@ -9,8 +9,9 @@ export default function MyPage() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/'); return }
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { router.push('/'); return }
+      const user = session.user
       const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
       setProfile(data)
     }
