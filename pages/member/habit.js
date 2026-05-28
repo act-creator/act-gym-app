@@ -29,8 +29,9 @@ export default function Habit() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/'); return }
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { router.push('/'); return }
+      const user = session.user
       setUserId(user.id)
 
       const { data: habitItems } = await supabase.from('habit_items').select('*').eq('user_id', user.id).order('order_index')
