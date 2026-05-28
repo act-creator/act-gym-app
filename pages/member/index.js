@@ -39,8 +39,9 @@ export default function VideoLibrary() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/'); return }
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { router.push('/'); return }
+      const user = session.user
       const { data } = await supabase.from('training_menus').select('*').order('created_at')
       setMenus(data || [])
       setFiltered(data || [])
