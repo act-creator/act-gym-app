@@ -3,49 +3,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --act-orange: #E85D04;
-  --act-orange-light: #FFF0E8;
-  --act-orange-border: #FFDCC8;
-  --act-dark: #1a1a1a;
-  --act-gray: #f7f7f5;
-  --act-border: #ebebeb;
-  --act-text: #1a1a1a;
-  --act-muted: #999;
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   background: #f7f7f5;
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: -apple-system, 'Noto Sans JP', sans-serif;
   color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
 }
 
+* { -webkit-tap-highlight-color: transparent; }
+
 .btn-primary {
-  display: block; width: 100%; padding: 13px 24px;
-  border-radius: 12px; font-size: 14px; font-weight: 500;
+  display: block; width: 100%; padding: 14px 24px;
+  border-radius: 12px; font-size: 16px; font-weight: 500;
   background: #E85D04; color: #fff; border: none; cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s; -webkit-appearance: none;
 }
 .btn-primary:hover { background: #c94e03; }
 .btn-primary:disabled { background: #f4a87a; cursor: not-allowed; }
 
-.btn-secondary {
-  display: block; width: 100%; padding: 13px 24px;
-  border-radius: 12px; font-size: 14px; font-weight: 500;
-  background: #fff; color: #1a1a1a; border: 0.5px solid #ebebeb; cursor: pointer;
-}
-.btn-secondary:hover { background: #f7f7f5; }
-
-.card {
-  background: #fff; border-radius: 16px;
-  border: 0.5px solid #ebebeb; padding: 16px;
-}
-
 .input {
-  width: 100%; padding: 12px 14px; border-radius: 12px;
-  border: 0.5px solid #ebebeb; font-size: 14px;
+  width: 100%; padding: 13px 14px; border-radius: 12px;
+  border: 0.5px solid #ebebeb; font-size: 16px;
   background: #f7f7f5; color: #1a1a1a;
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: -apple-system, 'Noto Sans JP', sans-serif;
+  -webkit-appearance: none; appearance: none;
 }
 .input:focus { outline: none; border-color: #E85D04; background: #fff; }
 
@@ -53,8 +40,3 @@ body {
 .badge-green { background: #eef7ee; color: #2d8a2d; font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-block; }
 .badge-gray { background: #f5f5f5; color: #888; font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-block; }
 .badge-amber { background: #fff8ee; color: #b36800; font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-block; }
-
-.section-title {
-  font-size: 11px; letter-spacing: 1.5px;
-  color: #999; text-transform: uppercase; margin-bottom: 10px;
-}
